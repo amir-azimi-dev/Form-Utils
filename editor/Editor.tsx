@@ -60,7 +60,7 @@ import "./editor.css";
 
 const LICENSE_KEY = "GPL";
 
-export default function App({ placeholder, onChange }: EditorPropType) {
+export default function Editor({ placeholder, onChange }: EditorPropType) { 
     const [isLayoutReady, setIsLayoutReady] = useState<boolean>(false);
     const editorContainerRef = useRef<null | HTMLDivElement>(null);
     const editorRef = useRef<null | HTMLDivElement>(null);
