@@ -1,0 +1,7 @@
+.custom-select__control {
+    @apply !border-gray-300 focus-within:!border-gray-500 !shadow-none !outline-none;
+}
+
+.custom-select__menu {
+    @apply border-gray-300 !border rounded-lg;
+}

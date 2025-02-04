@@ -1,0 +1,31 @@
+.custom-select__control {
+    @apply !shadow-none !outline-none;
+}
+
+.custom-select__menu {
+    @apply rounded-lg;
+}
+
+.successful-selection .custom-select__control {
+    @apply !border-green-300 focus-within:!border-green-500;
+}
+
+.successful-selection .custom-select__menu {
+    @apply border-green-300 !border;
+}
+
+.untouched-selection .custom-select__control {
+    @apply !border-gray-300 focus-within:!border-gray-500;
+}
+
+.untouched-selection .custom-select__menu {
+    @apply border-gray-300 !border;
+}
+
+.wrong-selection .custom-select__control {
+    @apply !border-red-300 focus-within:!border-red-500;
+}
+
+.wrong-selection .custom-select__menu {
+    @apply !border border-red-300;
+}
