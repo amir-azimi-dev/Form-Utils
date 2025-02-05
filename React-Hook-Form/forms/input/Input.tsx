@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, forwardRef } from "react";
+import { useState, forwardRef, ChangeEventHandler } from "react";
 import InputPropType, { InputTypes } from "./input.props.types";
 
 const Input = forwardRef<HTMLInputElement, InputPropType<InputTypes>>(function Input({
@@ -16,7 +16,17 @@ const Input = forwardRef<HTMLInputElement, InputPropType<InputTypes>>(function I
     readOnly
 }, ref) {
 
+    const [fileInputValue, setFileInputValue] = useState<string>("");
     const [isFocused, setIsFocused] = useState<boolean>(false);
+
+    const onChangeHandler: ChangeEventHandler<HTMLInputElement> = event => {
+        if (type !== "file") {
+            return onChange(event.target.value);
+        }
+
+        setFileInputValue(event.target.value);
+        event.target.files && onChange(event.target.files[0])
+    };
 
     return (
         <div>
@@ -40,8 +50,8 @@ const Input = forwardRef<HTMLInputElement, InputPropType<InputTypes>>(function I
                     ref={ref}
                     id={name}
                     type={type}
-                    value={disabled ? "" : value}
-                    onChange={onChange}
+                    value={disabled ? "" : type === "file" ? fileInputValue : value}
+                    onChange={onChangeHandler}
                     className={`w-full px-3 py-1.5 focus:outline-none disabled:bg-gray-200 rounded ${type === "file" ?
                         "ltr file:text-xs file:px-1.5 file:py-1 file:transition-colors file:hover:bg-purple-600 file:bg-purple-500 file:text-stone-50 file:border-none file:rounded" : ""}`}
                     onFocus={() => setIsFocused(true)}

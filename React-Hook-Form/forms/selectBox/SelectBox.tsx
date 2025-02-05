@@ -11,6 +11,7 @@ const SelectBox = forwardRef<SelectInstance, SelectBoxPropType>(({
     items,
     isValid,
     error,
+    value,
     onChange,
     onSelect,
     disabled }, ref) => {
@@ -22,7 +23,7 @@ const SelectBox = forwardRef<SelectInstance, SelectBoxPropType>(({
     }, []);
 
     if (!isSelectBoxReady) {
-        return null;
+        return <div className="w-full h-full bg-gray-100 animate-pulse"></div>;
     }
 
     return (
@@ -33,6 +34,7 @@ const SelectBox = forwardRef<SelectInstance, SelectBoxPropType>(({
                 placeholder={label}
                 isRtl={true}
                 isClearable={true}
+                value={value}
                 onChange={(newValue, _) => {
                     onSelect && onSelect(newValue as SelectSingleValueType);
                     onChange(newValue as SelectSingleValueType);

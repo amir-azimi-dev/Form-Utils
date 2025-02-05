@@ -1,5 +1,3 @@
-import { ChangeEventHandler } from "react";
-
 export type InputTypes = "text" | "number" | "file" | "password";
 
 type InputValueType<T extends InputTypes> = T extends "number" ? number :
@@ -9,9 +7,9 @@ type InputValueType<T extends InputTypes> = T extends "number" ? number :
 type InputBasePropType = {
     name: string;
     label: string;
-    isValid: boolean;
+    isValid?: boolean;
     error?: string | undefined;
-    onChange?: ChangeEventHandler<HTMLInputElement>;  // remove ? later
+    onChange: (value: string | Date | File) => void;
     onClick?: () => void;
     disabled?: boolean;
     readOnly?: boolean;

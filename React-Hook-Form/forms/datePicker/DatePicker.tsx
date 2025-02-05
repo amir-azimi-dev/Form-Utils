@@ -1,9 +1,8 @@
 "use client";
-
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import DatePickerPropType from "./datePicker.props.types";
 import Input from "../input/Input";
-import MultiDatePicker, { DateObject, Value } from "react-multi-date-picker";
+import MultiDatePicker, { Value } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 // @ts-ignore
@@ -12,14 +11,23 @@ import opacity from "react-element-popper/animations/opacity";
 import transition from "react-element-popper/animations/transition";
 import "react-multi-date-picker/styles/colors/green.css"
 
-function DatePicker({ value, onChange, placeholder, minDate, maxDate }: DatePickerPropType) {
+const DatePicker = forwardRef<HTMLInputElement, DatePickerPropType>(({ name, error, isValid, value, onChange, placeholder, minDate, maxDate }, ref) => {
+    const [date, setDate] = useState<Value>(placeholder);
+    const selectDateHandler = (date: Value) => {
+        if (!date?.valueOf) {
+            return;
+        }
+
+        const selectedDate = new Date(date.valueOf());
+        onChange(selectedDate);
+    };
+
     return (
         <div className="w-full">
             <MultiDatePicker
-
                 calendar={persian}
                 value={value}
-                onChange={onChange}
+                onChange={selectDateHandler}
                 placeholder={placeholder}
                 minDate={minDate}
                 maxDate={maxDate}
@@ -28,13 +36,15 @@ function DatePicker({ value, onChange, placeholder, minDate, maxDate }: DatePick
                 containerClassName="w-full"
                 render={(value, openCalendar) => (
                     <Input
-                        name="calender"
+                        ref={ref}
+                        name={name}
                         label="تاریخ تاسیس سازمان"
                         type="text"
                         value={value}
+                        onChange={() => ""}
                         onClick={openCalendar}
-                        isValid
-                        error={undefined}
+                        isValid={isValid}
+                        error={error}
                         readOnly
                     />
                 )}
@@ -44,6 +54,6 @@ function DatePicker({ value, onChange, placeholder, minDate, maxDate }: DatePick
             />
         </div>
     )
-}
+});
 
 export default DatePicker

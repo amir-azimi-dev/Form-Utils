@@ -4,7 +4,8 @@ export type SelectSingleValueType = SingleValue<{ id: string, label: string, val
 
 type SelectBoxPropType = {
     label: string;
-    isValid: boolean;
+    value?: object;
+    isValid?: boolean;
     error?: string | undefined;
     onSelect?: (data: null | SelectSingleValueType) => void;
     onChange: (data: null | SelectSingleValueType) => void;
