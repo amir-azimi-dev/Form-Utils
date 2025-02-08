@@ -6,6 +6,11 @@
     @apply rounded-lg;
 }
 
+.custom-select__input-container,
+.custom-select__placeholder {
+    @apply line-clamp-1;
+}
+
 .successful-selection .custom-select__control {
     @apply !border-green-300 focus-within:!border-green-500;
 }
@@ -14,7 +19,7 @@
     @apply border-green-300 !border;
 }
 
-.untouched-selection .custom-select__control {
+.untouched-selection .custom-select__control:not(.searchbox-select .custom-select__control) {
     @apply !border-gray-300 focus-within:!border-gray-500;
 }
 
@@ -28,4 +33,16 @@
 
 .wrong-selection .custom-select__menu {
     @apply !border border-red-300;
+}
+
+.searchbox-select {
+    @apply h-full;
+}
+
+.searchbox-select > * {
+    @apply bg-white rounded-lg lg:rounded-none;
+}
+
+.searchbox-select .custom-select__control {
+    @apply !h-full py-1.5 !border !border-none focus-within:!border-none rounded-lg lg:rounded-none;
 }

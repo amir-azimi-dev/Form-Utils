@@ -4,12 +4,15 @@ export type SelectSingleValueType = SingleValue<{ id: string, label: string, val
 
 type SelectBoxPropType = {
     label: string;
-    value?: object;
+    value?: SelectSingleValueType | SelectSingleValueType[];
     isValid?: boolean;
     error?: string | undefined;
-    onSelect?: (data: null | SelectSingleValueType) => void;
-    onChange: (data: null | SelectSingleValueType) => void;
+    onSelect?: (data: SelectSingleValueType | SelectSingleValueType[]) => void;
+    onChange: (data: SelectSingleValueType | SelectSingleValueType[]) => void;
     items: SelectSingleValueType[];
+    multiple?: boolean;
+    className?: string;
+    containerClassName?: string;
     disabled?: boolean;
 };
 

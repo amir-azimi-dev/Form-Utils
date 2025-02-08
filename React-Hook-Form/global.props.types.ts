@@ -1,14 +1,15 @@
 import { InputTypes } from "./components/modules/forms/input/input.props.types";
 import { SelectSingleValueType } from "./components/modules/forms/selectBox/selectBox.props.types";
 
-export type AllInputTypesType = InputTypes | "select" | "editor" | "date";
+export type AllInputTypesType = InputTypes | "select" | "editor" | "date" | "checkbox" | "textarea";
 
 type SingleInputInfoType<T extends AllInputTypesType> = T extends "select" ? {
     name: string;
     type: "select";
+    multiple?: boolean;
     label: string;
     items: SelectSingleValueType[];
-    onSelect?: (data: null | SelectSingleValueType) => void;
+    onSelect?: (data: SelectSingleValueType) => void;
     disabled?: boolean;
 } :
     T extends "editor" ? {
@@ -27,8 +28,25 @@ type SingleInputInfoType<T extends AllInputTypesType> = T extends "select" ? {
         label: string;
         disabled?: boolean;
         readonly?: boolean;
-    } : {};
+    } : T extends "checkbox" ? {
+        name: string;
+        type: "checkbox";
+        label: string;
+        disabled?: boolean;
+        readonly?: boolean;
+    } : {
+        name: string;
+        type: "textarea";
+        label: string;
+        disabled?: boolean;
+        readonly?: boolean;
+    };
 
-export type InputInfoType = (SingleInputInfoType<"select"> | SingleInputInfoType<InputTypes> | SingleInputInfoType<"editor"> | SingleInputInfoType<"date">);
+export type InputInfoType = SingleInputInfoType<"select"> |
+    SingleInputInfoType<"editor"> |
+    SingleInputInfoType<"date"> |
+    SingleInputInfoType<InputTypes> |
+    SingleInputInfoType<"checkbox"> |
+    SingleInputInfoType<"textarea">;
 
 export default SingleInputInfoType;

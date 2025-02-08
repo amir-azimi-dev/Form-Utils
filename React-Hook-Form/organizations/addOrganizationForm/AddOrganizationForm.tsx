@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import useRHF from "@/hooks/useRHF";
 import organizationSchema, { initialValues } from "@/schemas/organization";
 import SectionContainer from "@/components/modules/admin-panel/section-container/SectionContainer";
@@ -23,7 +23,7 @@ function AddOrganizations() {
 
   const [activeCities, setActiveCities] = useState<SelectSingleValueType[]>([{ id: "", label: "اول استان را انتخاب کنید.", value: "" }]);
 
-  const selectProvince = (provinceData: null | SelectSingleValueType) => {
+  const selectProvince = (provinceData: SelectSingleValueType) => {
     if (!provinceData) {
       setValue("city", null, { shouldValidate: true });
       return setActiveCities([{ id: "", label: "اول استان را انتخاب کنید.", value: "" }]);
@@ -34,17 +34,19 @@ function AddOrganizations() {
   };
 
 
-  const inputsData: InputInfoType[] = [
-    { name: "title", type: "text", label: "عنوان سازمان" },
-    { name: "province", type: "select", label: "استان", items: provinces, onSelect: selectProvince },
-    { name: "city", type: "select", label: "شهر", items: activeCities },
-    { name: "foundation", type: "date", label: "تاریخ تاسیس سازمان" },
-    { name: "organizationSite", type: "text", label: "وبسایت سازمان (اختیاری)" },
-    { name: "staffsCount", type: "text", label: "تعداد کارکنان (اختیاری)" },
-    { name: "organizationLogo", type: "file", label: "لوگوی سازمان (اختیاری)" },
-    { name: "organizationImage", type: "file", label: "تصویر بزرگ مربوط به سازمان (اختیاری)" },
-    { name: "description", type: "editor", placeholder: "معرفی سازمان ..." }
-  ];
+  const inputsData: InputInfoType[] = useMemo(() => (
+    [
+      { name: "title", type: "text", label: "عنوان سازمان" },
+      { name: "province", type: "select", label: "استان", items: provinces, onSelect: selectProvince },
+      { name: "city", type: "select", label: "شهر", items: activeCities },
+      { name: "foundation", type: "date", label: "تاریخ تاسیس سازمان" },
+      { name: "organizationSite", type: "text", label: "وبسایت سازمان (اختیاری)" },
+      { name: "staffsCount", type: "text", label: "تعداد کارکنان (اختیاری)" },
+      { name: "organizationLogo", type: "file", label: "لوگوی سازمان (اختیاری)" },
+      { name: "organizationImage", type: "file", label: "تصویر بزرگ مربوط به سازمان (اختیاری)" },
+      { name: "description", type: "editor", placeholder: "معرفی سازمان ..." }
+    ]
+  ), [selectProvince]);
 
   const addOrganizationHandler = (data: Record<string, any>) => {
     console.log(data);

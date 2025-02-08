@@ -12,6 +12,7 @@ const Input = forwardRef<HTMLInputElement, InputPropType<InputTypes>>(function I
     error,
     onChange,
     onClick,
+    onKeyDown,
     disabled,
     readOnly
 }, ref) {
@@ -35,7 +36,8 @@ const Input = forwardRef<HTMLInputElement, InputPropType<InputTypes>>(function I
                 className={`relative z-0 w-full ${error ?
                     "border-red-300 focus-within:border-red-500" :
                     isValid ? "border-green-300 focus-within:border-green-500" :
-                        "border-gray-300 focus-within:border-gray-500"} border rounded`}>
+                        "border-gray-300 focus-within:border-gray-500"} border rounded`}
+            >
                 <label
                     htmlFor={name}
                     className={`block absolute ${!disabled && (isFocused || value || type === "file") ?
@@ -56,6 +58,7 @@ const Input = forwardRef<HTMLInputElement, InputPropType<InputTypes>>(function I
                         "ltr file:text-xs file:px-1.5 file:py-1 file:transition-colors file:hover:bg-purple-600 file:bg-purple-500 file:text-stone-50 file:border-none file:rounded" : ""}`}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
+                    onKeyDown={onKeyDown}
                     disabled={disabled}
                     readOnly={readOnly}
                 />

@@ -14,6 +14,9 @@ const SelectBox = forwardRef<SelectInstance, SelectBoxPropType>(({
     value,
     onChange,
     onSelect,
+    multiple,
+    containerClassName,
+    className,
     disabled }, ref) => {
 
     const [isSelectBoxReady, setIsSelectBoxReady] = useState<boolean>(false);
@@ -27,18 +30,21 @@ const SelectBox = forwardRef<SelectInstance, SelectBoxPropType>(({
     }
 
     return (
-        <div className={error ? "wrong-selection" : isValid ? "successful-selection" : "untouched-selection"}>
+        <div className={containerClassName + " " + (error ? "wrong-selection" : isValid ? "successful-selection" : "untouched-selection")}>
             <Select
                 ref={ref}
                 options={items}
                 placeholder={label}
+                isMulti={multiple}
                 isRtl={true}
                 isClearable={true}
                 value={value}
                 onChange={(newValue, _) => {
-                    onSelect && onSelect(newValue as SelectSingleValueType);
-                    onChange(newValue as SelectSingleValueType);
+                    console.log(newValue)
+                    onSelect && onSelect(newValue as SelectSingleValueType | SelectSingleValueType[]);
+                    onChange(newValue as SelectSingleValueType | SelectSingleValueType[]);
                 }}
+                className={className}
                 classNamePrefix="custom-select"
                 isDisabled={disabled}
             />

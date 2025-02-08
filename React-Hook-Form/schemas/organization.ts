@@ -1,7 +1,7 @@
 import { date, mixed, object, string } from "yup";
 import selectBoxSingleValueSchema from "./selectBoxSingleValue";
 
-import imageSizeValidator from "@/utils/imageSizeValidator/imageSizeValidator";
+import imageSizeValidator from "@/utils/imageValidator/imageSizeValidator";
 const allowedMimeTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/x-icon"];
 
 
@@ -48,9 +48,11 @@ const organizationSchema = object({
             "فقط مجاز به آپلود تصاویر با پسوندهای png، jpeg، jpg یا webp هستید.",
             value => value instanceof File ? allowedMimeTypes.includes(value.type) : true
         )
-        .test("fileDemenstions",
+        .test("fileDimensions",
             "ابعاد تصویر باید حداقل برابر با 1024x600 پیکسل باشد.",
-            value => value instanceof File ? imageSizeValidator(value, 1024, 600) : true
+            value => value instanceof File ?
+                imageSizeValidator({ file: value, minWidth: 1024, minHeight: 600 }) :
+                true
         ),
 
     description: string()

@@ -60,7 +60,7 @@ import "./editor.css";
 
 const LICENSE_KEY = "GPL";
 
-function Editor({ placeholder, isValid, error, onChange }: EditorPropType) {
+function Editor({ value, placeholder, isValid, error, onChange }: EditorPropType) {
     const [isLayoutReady, setIsLayoutReady] = useState<boolean>(false);
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const editorContainerRef = useRef<null | HTMLDivElement>(null);
@@ -84,7 +84,7 @@ function Editor({ placeholder, isValid, error, onChange }: EditorPropType) {
 
         return {
             editorConfig: {
-                initialData: "",
+                initialData: value ? value : "",
                 licenseKey: LICENSE_KEY,
                 placeholder,
                 language: "fa",
@@ -370,6 +370,7 @@ function Editor({ placeholder, isValid, error, onChange }: EditorPropType) {
                                 }}
                                 editor={ClassicEditor}
                                 config={editorConfig}
+
                                 onFocus={() => setIsFocused(true)}
                                 onBlur={() => setIsFocused(false)}
                                 onChange={(_, editor) => onChange(editor.getData())}

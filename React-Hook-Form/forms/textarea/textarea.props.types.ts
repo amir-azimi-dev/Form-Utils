@@ -1,11 +1,13 @@
 import { ChangeEventHandler } from "react";
 
 type TextareaPropType = {
-    id: string;
+    name: string;
     label: string;
     rows?: number;
     value: string;
-    onChange?: ChangeEventHandler<HTMLTextAreaElement>;  // remove ? later
+    isValid?: boolean;
+    error?: string;
+    onChange: ChangeEventHandler<HTMLTextAreaElement>;
     disabled?: boolean;
     readOnly?: boolean;
 };

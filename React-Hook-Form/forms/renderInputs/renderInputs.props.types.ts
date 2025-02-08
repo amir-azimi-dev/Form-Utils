@@ -8,6 +8,7 @@ type RenderInputsPropType = {
     getValues: UseFormGetValues<any>;
     getFieldState: UseFormGetFieldState<any>;
     excludedInputTypes?: AllInputTypesType[];
+    includedInputTypes?: AllInputTypesType[];
 };
 
 export default RenderInputsPropType;
