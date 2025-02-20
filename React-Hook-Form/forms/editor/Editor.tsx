@@ -61,12 +61,20 @@ import "./editor.css";
 const LICENSE_KEY = "GPL";
 
 function Editor({ value, placeholder, isValid, error, onChange }: EditorPropType) {
+    const [editorInstance, setEditorInstance] = useState<ClassicEditor | null>(null);
     const [isLayoutReady, setIsLayoutReady] = useState<boolean>(false);
     const [isFocused, setIsFocused] = useState<boolean>(false);
     const editorContainerRef = useRef<null | HTMLDivElement>(null);
     const editorRef = useRef<null | HTMLDivElement>(null);
     const editorWordCountRef = useRef<null | HTMLDivElement>(null);
     const editorMenuBarRef = useRef<null | HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (editorInstance && value === "") {
+            editorInstance.setData("");
+        }
+
+    }, [value]);
 
     useEffect(() => {
         setIsLayoutReady(true);
@@ -335,54 +343,58 @@ function Editor({ value, placeholder, isValid, error, onChange }: EditorPropType
         };
     }, [isLayoutReady]);
 
-    if (!isLayoutReady) {
-        return <div className="h-64 bg-gray-100 animate-pulse"></div>;
-    }
-
     return (
-        <div
-            className={`main-container relative z-0 border ${isFocused ? (
-                error ? "border-red-500" : isValid ? "border-green-500" : ""
-            ) : (
-                error ? "border-red-300" : isValid ? "border-green-300" : ""
-            )}`}
-        >
-            <div
-                className="editor-container editor-container_classic-editor editor-container_include-block-toolbar editor-container_include-style editor-container_include-word-count"
-                ref={editorContainerRef}
-            >
-                <div className="editor-container__editor">
-                    <div ref={editorRef}>
-                        {isLayoutReady && editorConfig && (
-                            <CKEditor
-                                onReady={editor => {
-                                    const wordCount = editor.plugins.get("WordCount");
-                                    editorWordCountRef.current?.appendChild(wordCount.wordCountContainer);
-                                    const menuBarViewElement = editor.ui.view.menuBarView?.element;
-                                    menuBarViewElement && editorMenuBarRef.current?.appendChild(menuBarViewElement);
-                                }}
-                                onAfterDestroy={() => {
-                                    const editorWordCountRefChildren = editorWordCountRef.current?.children;
-                                    editorWordCountRefChildren && Array.from(editorWordCountRefChildren).forEach(child => child.remove());
+        <div className="min-h-64">
+            {isLayoutReady ? (
+                <div
+                    className={`main-container relative z-0 border ${isFocused ? (
+                        error ? "border-red-500" : isValid ? "border-green-500" : ""
+                    ) : (
+                        error ? "border-red-300" : isValid ? "border-green-300" : ""
+                    )}`}
+                >
+                    <div
+                        className="editor-container editor-container_classic-editor editor-container_include-block-toolbar editor-container_include-style editor-container_include-word-count"
+                        ref={editorContainerRef}
+                    >
+                        <div className="editor-container__editor">
+                            <div ref={editorRef}>
+                                {isLayoutReady && editorConfig && (
+                                    <CKEditor
+                                        onReady={editor => {
+                                            setEditorInstance(editor);
+                                            const wordCount = editor.plugins.get("WordCount");
+                                            editorWordCountRef.current?.appendChild(wordCount.wordCountContainer);
+                                            const menuBarViewElement = editor.ui.view.menuBarView?.element;
+                                            menuBarViewElement && editorMenuBarRef.current?.appendChild(menuBarViewElement);
+                                        }}
+                                        onAfterDestroy={() => {
+                                            const editorWordCountRefChildren = editorWordCountRef.current?.children;
+                                            editorWordCountRefChildren && Array.from(editorWordCountRefChildren).forEach(child => child.remove());
 
-                                    const editorMenuBarRefChildren = editorMenuBarRef.current?.children;
-                                    editorMenuBarRefChildren && Array.from(editorMenuBarRefChildren).forEach(child => child.remove());
-                                }}
-                                editor={ClassicEditor}
-                                config={editorConfig}
+                                            const editorMenuBarRefChildren = editorMenuBarRef.current?.children;
+                                            editorMenuBarRefChildren && Array.from(editorMenuBarRefChildren).forEach(child => child.remove());
+                                        }}
+                                        editor={ClassicEditor}
+                                        config={editorConfig}
 
-                                onFocus={() => setIsFocused(true)}
-                                onBlur={() => setIsFocused(false)}
-                                onChange={(_, editor) => onChange(editor.getData())}
-                            />
-                        )}
+                                        onFocus={() => setIsFocused(true)}
+                                        onBlur={() => setIsFocused(false)}
+                                        onChange={(_, editor) => onChange(editor.getData())}
+                                    />
+                                )}
+                            </div>
+                        </div>
+                        <div className="flex-center justify-between">
+                            <p className="mt-1 mr-3 text-red-500 text-xs">{error && error}</p>
+                            <div className="editor_container__word-count" ref={editorWordCountRef}></div>
+                        </div>
                     </div>
                 </div>
-                <div className="flex-center justify-between">
-                    <p className="mt-1 mr-3 text-red-500 text-xs">{error && error}</p>
-                    <div className="editor_container__word-count" ref={editorWordCountRef}></div>
-                </div>
-            </div>
+            ) : (
+                <div className="h-64 bg-gray-100 animate-pulse"></div>
+            )
+            }
         </div>
     );
 }
